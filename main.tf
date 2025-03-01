@@ -10,7 +10,7 @@ data "aws_security_group" "allow_http_ssh" {
 }
 
 resource "aws_instance" "web" {
-  ami           = "ami-02912a5f3748ebfac"
+  ami           = "ami-09a9858973b288bdd"
   instance_type = "t3.micro"
   key_name      = "keyforlab1"
 
