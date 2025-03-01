@@ -1,5 +1,5 @@
 provider "aws" {
-  region     = "eu-north-1"
+  region = "eu-north-1"
 }
 
 resource "aws_security_group" "allow_http_ssh" {
@@ -14,8 +14,8 @@ resource "aws_security_group" "allow_http_ssh" {
   }
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -29,7 +29,7 @@ resource "aws_security_group" "allow_http_ssh" {
 }
 
 resource "aws_instance" "web" {
-  ami           = "ami-04169656fea786776"
+  ami           = "ami-02912a5f3748ebfac"
   instance_type = "t3.micro"
   key_name      = "keyforlab1"
 
