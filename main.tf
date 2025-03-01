@@ -41,7 +41,7 @@ resource "aws_instance" "web" {
     sudo apt install -y docker.io
     sudo systemctl start docker
     sudo systemctl enable docker
-    sudo docker run -d -p 8080:80 martastepaniuk/lab1:latest
+    sudo docker run -d -p 80:80 martastepaniuk/lab1:latest
   EOF
 
   tags = {
