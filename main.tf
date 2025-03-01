@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "allow_http_ssh" {
-  name        = "allow_http_ssh"
+  name        = "allow_http_ssh_terraform"
   description = "Security group that allows SSH and HTTP access"
 
   ingress {
