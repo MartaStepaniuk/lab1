@@ -2,33 +2,73 @@ provider "aws" {
   region = "eu-north-1"
 }
 
-terraform {
-  backend "local" {
-    path = "terraform.tfstate"
+resource "aws_key_pair" "lab_key" {
+  key_name   = "lab-key"
+  public_key = file("${path.module}/keyforlab1.pub")
+}
+
+resource "aws_security_group" "web_sg" {
+  name        = "web-security-group"
+  description = "Allow HTTP and SSH traffic"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "web-security-group"
   }
 }
 
-resource "aws_instance" "my_instance" {
-  ami           = "ami-09a9858973b288bdd"
-  instance_type = "t2.nano"
-  key_name      = "keyforlab1"
-
-  vpc_security_group_ids = ["sg-0f80e74fb54f67309"]
+resource "aws_instance" "web_server" {
+  ami                    = "ami-0989fb15ce71ba39e"
+  instance_type          = "t3.micro"
+  key_name               = aws_key_pair.lab_key.key_name
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   user_data = <<-EOF
-    #! /bin/bash
-    sudo apt-get update
-    sudo apt-get install -y apache2
-    sudo systemctl start apache2
-    sudo systemctl enable apache2
-    echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
+    #!/bin/bash
+    apt-get update
+    apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    apt-get update
+    apt-get install -y docker-ce docker-ce-cli containerd.io
+    systemctl start docker
+    systemctl enable docker
+    
+    docker run -d --name web-app -p 80:80 ${var.docker_hub_username}/lab1:latest
+    docker run -d --name watchtower -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --interval 30
   EOF
 
   tags = {
-    Name = "my-instance"
+    Name = "web-server"
   }
 }
 
-output "instance_ip" {
-  value = aws_instance.my_instance.public_ip
+variable "docker_hub_username" {
+  description = "martastepaniuk"
+  type        = string
+}
+
+output "instance_public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = aws_instance.web_server.public_ip
 }
