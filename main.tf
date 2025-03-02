@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 provider "aws" {
   region = "eu-north-1"
 }
@@ -8,7 +17,7 @@ resource "aws_key_pair" "lab_key" {
 }
 
 resource "aws_security_group" "web_sg" {
-  name        = "web-security-group"
+  name        = "allow_http_ssh"
   description = "Allow HTTP and SSH traffic"
 
   ingress {
@@ -16,6 +25,7 @@ resource "aws_security_group" "web_sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTP traffic"
   }
 
   ingress {
@@ -23,6 +33,7 @@ resource "aws_security_group" "web_sg" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "SSH traffic"
   }
 
   egress {
@@ -30,10 +41,16 @@ resource "aws_security_group" "web_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
-    Name = "web-security-group"
+    Name = "allow_http_ssh"
+  }
+
+  # Запобігає повторному створенню при відсутності імпорту
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
