@@ -32,7 +32,10 @@ jobs:
         run: terraform validate
 
       - name: Import existing key pair
-        run: terraform import aws_key_pair.lab_key keyforlab1
+        run: |
+          if aws ec2 describe-key-pairs --key-name keyforlab1; then
+            terraform import aws_key_pair.lab_key keyforlab1
+          fi
 
       - name: Get security group ID and import it
         run: |

@@ -47,11 +47,6 @@ resource "aws_security_group" "web_sg" {
   tags = {
     Name = "allow_http_ssh"
   }
-
-  # Запобігає повторному створенню при відсутності імпорту
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_instance" "web_server" {
