@@ -11,13 +11,15 @@ provider "aws" {
   region = "eu-north-1"
 }
 
+# Використання існуючої ключової пари
 resource "aws_key_pair" "lab_key" {
   key_name   = "keyforlab1"
   public_key = var.public_ssh_key
 }
 
+# Використання існуючої security group
 resource "aws_security_group" "web_sg" {
-  name        = "allow_http_ssh"
+  name        = "web-security-group"
   description = "Allow HTTP and SSH traffic"
 
   ingress {
@@ -45,7 +47,12 @@ resource "aws_security_group" "web_sg" {
   }
 
   tags = {
-    Name = "allow_http_ssh"
+    Name = "web-security-group"
+  }
+
+  # Запобігає повторному створенню при відсутності імпорту
+  lifecycle {
+    prevent_destroy = true
   }
 }
 

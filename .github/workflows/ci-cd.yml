@@ -32,14 +32,13 @@ jobs:
         run: terraform validate
 
       - name: Import existing key pair
-        run: |
-          if aws ec2 describe-key-pairs --key-name keyforlab1; then
-            terraform import aws_key_pair.lab_key keyforlab1
-          fi
+        continue-on-error: true
+        run: terraform import aws_key_pair.lab_key keyforlab1
 
       - name: Get security group ID and import it
+        continue-on-error: true
         run: |
-          SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=allow_http_ssh --query 'SecurityGroups[0].GroupId' --output text)
+          SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=web-security-group --query 'SecurityGroups[0].GroupId' --output text)
           if [ "$SG_ID" != "None" ]; then
             terraform import aws_security_group.web_sg $SG_ID
           fi
