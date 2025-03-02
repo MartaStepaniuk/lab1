@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_key_pair" "lab_key" {
-  key_name   = "lab-key"
+  key_name   = "keyforlab1"
   public_key = var.public_ssh_key
 }
 
