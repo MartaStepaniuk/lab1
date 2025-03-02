@@ -33,7 +33,10 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var="docker_hub_username=${{ secrets.DOCKERHUB_USERNAME }}" -out=tfplan
+        run: terraform plan \
+          -var="docker_hub_username=${{ secrets.DOCKERHUB_USERNAME }}" \
+          -var="public_ssh_key=${{ secrets.PUBLIC_SSH_KEY }}" \
+          -out=tfplan
         continue-on-error: true
 
       - name: Check Terraform Plan Status
@@ -42,7 +45,9 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var="docker_hub_username=${{ secrets.DOCKERHUB_USERNAME }}"
+        run: terraform apply -auto-approve \
+          -var="docker_hub_username=${{ secrets.DOCKERHUB_USERNAME }}" \
+          -var="public_ssh_key=${{ secrets.PUBLIC_SSH_KEY }}"
 
       - name: Capture Instance IP
         if: github.ref == 'refs/heads/main'

@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_key_pair" "lab_key" {
   key_name   = "lab-key"
-  public_key = file("${path.module}/keyforlab1.pub")
+  public_key = var.public_ssh_key
 }
 
 resource "aws_security_group" "web_sg" {
@@ -64,7 +64,12 @@ resource "aws_instance" "web_server" {
 }
 
 variable "docker_hub_username" {
-  description = "martastepaniuk"
+  description = "Docker Hub username"
+  type        = string
+}
+
+variable "public_ssh_key" {
+  description = "Public SSH key"
   type        = string
 }
 
