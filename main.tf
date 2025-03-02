@@ -2,8 +2,8 @@ provider "aws" {
   region = "eu-north-1"
 }
 
-resource "aws_security_group" "web_sg" {
-  name        = "security-group"
+resource "aws_security_group" "security_group" {
+  name        = "security_group"
   description = "Security group for web application"
 
   ingress {
@@ -40,7 +40,7 @@ resource "aws_instance" "web_instance" {
   ami                    = "ami-0989fb15ce71ba39e"
   instance_type          = "t3.micro"
   key_name               = data.aws_key_pair.existing.key_name
-  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  vpc_security_group_ids = [aws_security_group.security_group.id]
 
   user_data = <<-EOF
     #!/bin/bash
