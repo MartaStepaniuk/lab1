@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "web_sg" {
-  name        = "web-sg"
+  name        = "security-group"
   description = "Security group for web application"
 
   ingress {
@@ -36,7 +36,6 @@ data "aws_key_pair" "existing" {
   key_name = "keyforlab1"
 }
 
-# Створюємо EC2 інстанс
 resource "aws_instance" "web_instance" {
   ami                    = "ami-0989fb15ce71ba39e"
   instance_type          = "t3.micro"
