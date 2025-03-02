@@ -66,6 +66,7 @@ resource "aws_instance" "web_server" {
 variable "docker_hub_username" {
   description = "Docker Hub username"
   type        = string
+  default     = "martastepaniuk"
 }
 
 variable "public_ssh_key" {
