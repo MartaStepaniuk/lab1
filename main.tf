@@ -11,7 +11,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "security_group" {
-  name        = "security_group10"
+  name        = "security-group"
   description = "Security group for web application"
 
   ingress {
@@ -72,7 +72,9 @@ resource "aws_instance" "web_instance" {
     docker run -d \
       --name watchtower \
       -v /var/run/docker.sock:/var/run/docker.sock \
-      containrrr/watchtower
+      containrrr/watchtower \
+      --interval 30 \
+      martastepaniuk/lab1
   EOF
 
   tags = {
