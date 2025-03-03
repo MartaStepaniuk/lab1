@@ -49,7 +49,11 @@ jobs:
           terraform_version: 1.0.0
           
       - name: Terraform Init
-        run: terraform init
+        run: |
+          terraform init \
+          -backend-config="bucket=awsbucketforlab2group3" \
+          -backend-config="key=terraform/state" \
+          -backend-config="region=eu-north-1"
         
       - name: Terraform Format
         run: terraform fmt -check

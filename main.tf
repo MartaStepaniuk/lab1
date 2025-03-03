@@ -1,9 +1,17 @@
+terraform {
+  backend "s3" {
+    bucket = "awsbucketforlab2group3"
+    key    = "terraform/state"
+    region = "eu-north-1"
+  }
+}
+
 provider "aws" {
   region = "eu-north-1"
 }
 
 resource "aws_security_group" "security_group" {
-  name        = "security_group"
+  name        = "security_group10"
   description = "Security group for web application"
 
   ingress {
