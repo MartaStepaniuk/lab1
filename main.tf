@@ -74,7 +74,7 @@ resource "aws_instance" "web_instance" {
       -v /var/run/docker.sock:/var/run/docker.sock \
       containrrr/watchtower \
       --interval 30 \
-      martastepaniuk/lab1
+      martastepaniuk/lab1:latest
   EOF
 
   tags = {
