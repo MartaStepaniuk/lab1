@@ -58,11 +58,7 @@ resource "aws_instance" "web_instance" {
     usermod -aG docker ubuntu
     systemctl start docker
     systemctl enable docker
-
-    docker rm -f web-app 2>/dev/null
     docker run -d --name web-app --restart always -p 80:80 martastepaniuk/lab1:latest
-
-    docker rm -f watchtower 2>/dev/null
     docker run -d --name watchtower --restart always \
       -v /var/run/docker.sock:/var/run/docker.sock \
       containrrr/watchtower \
