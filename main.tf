@@ -11,7 +11,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "security_group" {
-  name        = "sgroup"
+  name        = "security-group"
   description = "Security group for web application"
 
   ingress {
@@ -52,15 +52,9 @@ resource "aws_instance" "web_instance" {
 
   user_data = <<-EOF
     #!/bin/bash
-
     apt-get update
     apt-get install -y curl
-
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    apt-get update
-    apt-get install -y docker-ce docker-ce-cli containerd.io
-
+    curl -fsSL https://get.docker.com | sh
     usermod -aG docker ubuntu
     systemctl start docker
     systemctl enable docker
